@@ -9,10 +9,15 @@ const PATHS = {
   build: path.join(__dirname, 'build')
 };
 
+process.env.BABEL_ENV = TARGET;
+
 const common = {
   // Entry accepts a path or an object of entries.
   // The build chapter contains an example of the latter.
   entry: PATHS.app,
+  resolve: {
+    extensions: ['', '.js', '.jsx']
+  },
   output: {
     path: PATHS.build,
     filename: 'bundle.js'
@@ -32,12 +37,19 @@ const common = {
         loaders: ['style', 'css'],
         // Include accepts either a path or an array of paths.
         include: PATHS.app
+      },
+      {
+        test: /\.jsx?$/,
+        loaders: ['babel'],
+        include: PATHS.app
       }
     ]
   },
   plugins: [
     new HtmlwebpackPlugin({
-      title: 'Kanban app'
+      template: 'node_modules/html-webpack-template/index.html',
+      title: 'Kanban app',
+      appMountId: 'app'
     })
   ]
 };
